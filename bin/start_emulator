@@ -1,0 +1,3 @@
+#!/bin/bash
+
+emulator @payment-app-device -writable-system

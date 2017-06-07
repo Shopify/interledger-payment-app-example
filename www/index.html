@@ -1,0 +1,135 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <title>Online store</title>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+</head>
+
+<body>
+  <button>Buy</button>
+  <pre id="logs">
+  </pre>
+
+  <script type="text/javascript">
+    const ledgerHost = "blue.ilpdemo.org";
+    const ledgerStatsUrl = `https://${ledgerHost}/api/payments/stats`;
+
+    // We decided to poll for a diff in wallet transfer counts to decide if the payment
+    // was successful or not. This is not the accurate way of doing this, but is good
+    // enough for our use case
+    function stats() {
+      return fetch(ledgerStatsUrl, {
+        headers: {
+          "Authorization": "Basic YWxpY2U6YWxpY2U=",
+        },
+      }).then((response) => response.json());
+    }
+
+    if (typeof window.PaymentRequest === 'function') {
+      document.querySelector('button').addEventListener('click', () => {
+        stats().then((data) => {
+          window.transfersCount = data.transfers_count;
+        });
+
+        const methodData = [
+          {
+            supportedMethods: ["interledger"],
+            data: {
+               // This should probably be more along the lines of https://${ledgerHost}/api/spsp/alice
+               // But the way the ilp-kit was implemented, calling their quoting endpoint actually calls out to the SPSP endpoint
+               // And their ilp-kit implementation only accepts a destination (non ILP), see docs here: https://interledgerjs.github.io/ilp-kit/apidoc/#api-Payment-Quote
+               // It expects to receive a "destination" (see here: https://github.com/interledgerjs/ilp-kit/blob/master/api/src/lib/spsp.js#L64), as it's doing the spsp resolving for us
+               // TODO: Open up a PR to change that quoting endpoint to accept either / or desination / destination_address
+              spspEndpoint: `alice@${ledgerHost}`,
+            }
+          },
+        ];
+        const details = {
+          id: "super-store-order-123-12312",
+          displayItems: [
+            {
+              label: "Sub-total",
+              amount: { currency: "USD", value: "55.00" },
+            },
+            {
+              label: "Sales Tax",
+              amount: { currency: "USD", value: "5.00" },
+            }
+          ],
+          total: {
+            label: "Total due",
+            amount: { currency: "USD", value: "60.00" },
+          },
+        };
+        const options = { requestShipping: true };
+
+        const paymentRequest = new PaymentRequest(methodData, details, options);
+        paymentRequest.addEventListener('shippingaddresschange', (event) => {
+          console.log(event);
+          event.updateWith({
+            total: {
+              label: 'Total',
+              amount: {
+                currency: 'USD',
+                value: '5.55',
+              },
+            },
+            displayItems: [
+              {label: 'Shipping', amount: {currency: 'USD', value: 0}},
+              {label: 'Taxes', amount: {currency: 'USD', value: '0.00'}},
+            ],
+            shippingOptions: [
+              {id: 'free-shipping', label: 'Free Shipping', amount: {value: '5.50', currency: 'USD'}, selected: true},
+              {id: 'super-shipping', label: 'Super Shipping', amount: {value: '3.30', currency: 'USD'}, selected: false},
+            ],
+          });
+        });
+        paymentRequest.addEventListener('shippingoptionchange', (event) => {
+          console.log(event);
+          event.updateWith({
+            total: {
+              label: 'Total',
+              amount: {
+                currency: 'USD',
+                value: '12.45',
+              },
+            },
+            displayItems: [
+              {label: 'Shipping', amount: {currency: 'USD', value: 0}},
+              {label: 'Taxes', amount: {currency: 'USD', value: '0.00'}},
+            ],
+            shippingOptions: [
+              {id: 'free-shipping', label: 'Free Shipping', amount: {value: '5.50', currency: 'USD'}, selected: true},
+              {id: 'super-shipping', label: 'Super Shipping', amount: {value: '3.30', currency: 'USD'}, selected: false},
+            ],
+          });
+        });
+
+        paymentRequest
+          .show()
+          .then((paymentResponse) => {
+            console.log(paymentResponse);
+            paymentResponse.complete('success');
+
+            const logs = document.getElementById("logs");
+            logs.innerHTML = JSON.stringify(paymentResponse, null, 4) + "\n\n" + logs.innerHTML;
+
+            const intervalReference = setInterval(() => {
+              stats().then((data) => {
+                if (data.transfers_count > window.transfersCount) {
+                  clearTimeout(intervalReference);
+                  logs.innerHTML = "Success!\n\n" + logs.innerHTML;
+                } else {
+                  logs.innerHTML = "Polling for completion\n\n" + logs.innerHTML;
+                }
+              });
+            }, 500);
+          });
+      });
+    };
+  </script>
+</body>
+</html>

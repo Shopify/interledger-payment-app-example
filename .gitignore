@@ -1,0 +1,11 @@
+*.DS_Store
+*.gradle
+*.iml
+
+PaymentApp/.externalNativeBuild
+PaymentApp/.idea/libraries
+PaymentApp/.idea/workspace.xml
+
+PaymentApp/build
+PaymentApp/captures
+PaymentApp/local.properties

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./PaymentApp/gradlew -b ./PaymentApp/build.gradle assembleDebug
+adb install -r "./PaymentApp/app/build/outputs/apk/app-debug.apk"
+adb install -r "./vendor/com-chrome-canary-311700011-28333562-08ff00edda4778095e10f55e67ce7e3a.apk"
