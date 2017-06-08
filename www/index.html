@@ -9,11 +9,12 @@
 </head>
 
 <body>
-  <button>Buy</button>
-  <pre id="logs">
-  </pre>
+  <button id="buy-button">Buy</button>
+  <pre id="logs"></pre>
 
   <script type="text/javascript">
+    const buyButton = document.getElementById("buy-button");
+    const logs = document.getElementById("logs");
     const ledgerHost = "blue.ilpdemo.org";
     const ledgerStatsUrl = `https://${ledgerHost}/api/payments/stats`;
 
@@ -28,8 +29,24 @@
       }).then((response) => response.json());
     }
 
+    function pollStats() {
+      setTimeout(() => {
+        stats().then((data) => {
+          if (data.transfers_count > window.transfersCount) {
+            logs.innerHTML = "Success!\n\n" + logs.innerHTML;
+            window.transfersCount = data.transfers_count;
+          } else {
+            logs.innerHTML = "Polling for completion\n\n" + logs.innerHTML;
+            pollStats();
+          }
+        });
+      }, 500);
+    }
+
     if (typeof window.PaymentRequest === 'function') {
-      document.querySelector('button').addEventListener('click', () => {
+      buyButton.addEventListener('click', () => {
+        logs.innerHTML = '';
+
         stats().then((data) => {
           window.transfersCount = data.transfers_count;
         });
@@ -114,19 +131,8 @@
             console.log(paymentResponse);
             paymentResponse.complete('success');
 
-            const logs = document.getElementById("logs");
             logs.innerHTML = JSON.stringify(paymentResponse, null, 4) + "\n\n" + logs.innerHTML;
-
-            const intervalReference = setInterval(() => {
-              stats().then((data) => {
-                if (data.transfers_count > window.transfersCount) {
-                  clearTimeout(intervalReference);
-                  logs.innerHTML = "Success!\n\n" + logs.innerHTML;
-                } else {
-                  logs.innerHTML = "Polling for completion\n\n" + logs.innerHTML;
-                }
-              });
-            }, 500);
+            pollStats();
           });
       });
     };
