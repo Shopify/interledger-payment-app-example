@@ -11,7 +11,7 @@ In order for the Payment App to be presented as a payment choice for the user th
 1. The website using Payment Request has to specify an [Interledger Payment Method](https://w3c.github.io/webpayments/proposals/interledger-payment-method.html)
 2. A payment app with an Interledger payment method has to be exposed to the browser
 
-As of writing, only [Chrome Canary 60+](https://codereview.chromium.org/2850503002) supports Payment Apps. These Payment Apps are automatically discovered by Android when they expose an `intent-filter` as such: https://github.com/Shopify/interledger-payment-app-example/blob/9cab508fc6ed383b6949c341c338a04cc652a64a/PaymentApp/app/src/main/AndroidManifest.xml#L23.
+As of writing, only [Chrome Canary 60+](https://codereview.chromium.org/2850503002) supports Payment Apps and the Interledger payment method. These Payment Apps are automatically discovered by Android when they expose an `intent-filter` as such: https://github.com/Shopify/interledger-payment-app-example/blob/9cab508fc6ed383b6949c341c338a04cc652a64a/PaymentApp/app/src/main/AndroidManifest.xml#L23.
 
 Once the buyer initiates a Payment Request, if the buyer's and provider's payment method intersect, he'll get presented a payment sheet where he can provide his information, choose a Shipping Method and a payment method. Once the user choses the Payment App through the payment sheet and proceeds to pay, the sheet then transfers control to the Payment App, which deals with the payment.
 
@@ -107,15 +107,17 @@ As with any project in a hack-o-thon, a few shortcuts were taken for simplicity:
 
 ## Playing around
 
-**Important:** You'll have to find a way to serve the channel through HTTPS, as `PaymentRequest` only works with SSL. There's a few ways of doing this, but the easier way is to use a proxy or tunneling service (like [Ngrok](https://ngrok.com)).
+For simplicity, we'll refer to the website that implements `PaymentRequest` as an online store.
 
-1. Start the channel
+**Important:** You'll have to find a way to serve the online store through HTTPS, as `PaymentRequest` only works with SSL. There's a few ways of doing this, but the easier way is to use a proxy or tunneling service (like [Ngrok](https://ngrok.com)).
+
+1. Start the online store
 
   ```
-  ./bin/start_channel
+  ./bin/start_online_store
   ```
 
-2. Somehow enable SSL for said channel (through a proxy or tunneling service, as explained higher up)
+2. Somehow enable SSL for said online store (through a proxy or tunneling service, as explained higher up)
 
 3. Start the emulator
 
@@ -123,6 +125,6 @@ As with any project in a hack-o-thon, a few shortcuts were taken for simplicity:
   ./bin/start_emulator
   ```
 
-4. Open up Chrome Canary and visit the channel URL (remember, it has to support SSL)
+4. Open up Chrome Canary and visit the online store URL (remember, it has to support SSL)
 
 5. Click on **Buy**
