@@ -6,7 +6,6 @@ package com.shopify.paymentapp;
 
 public enum Credentials {
     LEDGER_URL("https://red.ilpdemo.org"),
-    LEDGER_ILP("alice@red.ilpdemo.org"),
     LEDGER_AUTH_TOKEN("YWxpY2U6YWxpY2U="); // base64(alice:alice)
 
     private final String value;

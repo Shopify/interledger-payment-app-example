@@ -1,10 +1,9 @@
 package com.shopify.paymentapp;
 
 import android.content.Intent;
-import android.os.Handler;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,8 +18,6 @@ import java.util.UUID;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
     public static String PAYMENT_METHOD_IDENTIFIER = "interledger";
-
-    private final Handler mHandler = new Handler();
 
     private boolean mError;
     private double totalAmount;

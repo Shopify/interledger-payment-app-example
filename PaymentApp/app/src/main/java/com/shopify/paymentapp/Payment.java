@@ -6,12 +6,7 @@ import com.google.gson.annotations.Expose;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -22,13 +17,11 @@ import java.util.UUID;
 public class Payment {
     private final UUID uuid;
     private final String spspEndpoint;
-    private final double totalAmount;
     private final Quote.Response quoteResponse;
 
-    public Payment(UUID uuid, String spspEndpoint, double totalAmount, Quote.Response quoteResponse) {
+    public Payment(UUID uuid, String spspEndpoint, Quote.Response quoteResponse) {
         this.uuid = uuid;
         this.spspEndpoint = spspEndpoint;
-        this.totalAmount = totalAmount;
         this.quoteResponse = quoteResponse;
     }
 
