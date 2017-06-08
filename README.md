@@ -7,7 +7,7 @@ As such, it contains both the website implementation of the [Payment Request](ht
 1. The fake website implementation using the Payment Request API has to specify an [Interledger Payment Method](https://w3c.github.io/webpayments/proposals/interledger-payment-method.html)
 2. A payment app with an Interledger payment method has to be installed
 
-As of writing, only [Chrome Canary 60+](https://codereview.chromium.org/2850503002) supports Payment Apps. These are automatically discovered by Android when they expose an `intent-filter` as such: https://github.com/Shopify/interledger-payment-app-example/blob/4f8185ead3ecfd95d12f06c812e76022ca4917c4/PaymentApp/app/src/main/AndroidManifest.xml#L23.
+As of writing, only [Chrome Canary 60+](https://codereview.chromium.org/2850503002) supports Payment Apps. These are automatically discovered by Android when they expose an `intent-filter` as such: https://github.com/Shopify/interledger-payment-app-example/blob/9cab508fc6ed383b6949c341c338a04cc652a64a/PaymentApp/app/src/main/AndroidManifest.xml#L23.
 
 Once the user choses the Payment App through the payment sheet, the sheet then transfers control to the Payment App, which deals with the payment.
 
@@ -31,9 +31,9 @@ Both wallets have been implemented as an initiative to show off the Interledger 
 
 As with any project in a hack-o-thon, a few shortcuts were taken for simplicity:
 
-1. The app has hardcoded user credentials for the originating ledger (see: https://github.com/Shopify/interledger-payment-app-example/blob/4f8185ead3ecfd95d12f06c812e76022ca4917c4/PaymentApp/app/src/main/java/com/shopify/paymentapp/Credentials.java#L8); In a real world use case, the user would be expected to authenticate within the app to a third party ledger (a wallet for example)
+1. The app has hardcoded user credentials for the originating ledger (see: https://github.com/Shopify/interledger-payment-app-example/blob/9cab508fc6ed383b6949c341c338a04cc652a64a/PaymentApp/app/src/main/java/com/shopify/paymentapp/Credentials.java#L8); In a real world use case, the user would be expected to authenticate within the app to a third party ledger (a wallet for example)
 
-2. The destination ledger is a heroku instance of the ILP Kit in Node that can be found [here](https://github.com/interledgerjs/ilp-kit); if it is ever down, you can change it to any website that implements the same endpoints here: https://github.com/Shopify/interledger-payment-app-example/blob/4f8185ead3ecfd95d12f06c812e76022ca4917c4/www/index.html#L17
+2. The destination ledger is a heroku instance of the ILP Kit in Node that can be found [here](https://github.com/interledgerjs/ilp-kit); if it is ever down, you can change it to any website that implements the same endpoints here: https://github.com/Shopify/interledger-payment-app-example/blob/9cab508fc6ed383b6949c341c338a04cc652a64a/www/index.html#L17
 
 ## Prerequisites
 
