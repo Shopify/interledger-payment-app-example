@@ -23,7 +23,7 @@ This repo focuses on Google's beta implementation of Payment App's on Android, t
 
 ![Demo](docs/demo.gif)
 
-This demo shows off transfering an amount from ledger **alice@red.ilpdemo.org** to **blue@red.ilpdemo.org**.
+This demo shows off transfering an amount from ledger **alice@red.ilpdemo.org** to **alice@blue.ilpdemo.org**.
 
 Both wallets have been implemented as an initiative to show off the Interledger spec.
 
