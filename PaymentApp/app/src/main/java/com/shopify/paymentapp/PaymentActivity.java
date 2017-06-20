@@ -134,7 +134,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         Payment.Response paymentResponse;
         try {
-            paymentResponse = new Payment(UUID.randomUUID(), spspEndpoint, totalAmount, quoteResponse).execute();
+            paymentResponse = new Payment(UUID.randomUUID(), spspEndpoint, quoteResponse).execute();
         } catch (IOException e) {
             setResult(RESULT_CANCELED);
             finish();
