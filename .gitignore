@@ -1,8 +1,8 @@
 *.DS_Store
-*.gradle
-*.iml
 
+PaymentApp/**/*.iml
 PaymentApp/.externalNativeBuild
+PaymentApp/.gradle
 PaymentApp/.idea/libraries
 PaymentApp/.idea/workspace.xml
 
